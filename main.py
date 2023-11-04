@@ -2,12 +2,12 @@ import pygame
 from pygame.locals import *
 from players import Player
 import world as layout
+import random
 import ui
 
 pygame.init()
 
 fps = 25
-width, height = 8, 4  # Grid dimensions
 square_size = 50  # Size of each square in pixels
 color_count = 3  
 
@@ -18,7 +18,8 @@ clock = pygame.time.Clock()
 
 # Function to initialize/restart the game
 def restart_game():
-    global player, world
+    global player, world, width, height
+    width, height = random.randrange(5, 20), random.randrange(5, 20)
     world = layout.get_layout(width, height, color_count)
     player = Player(world, color_count)
     
