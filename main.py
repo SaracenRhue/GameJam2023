@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from players import Player
+from players import Player, swap_colors
 import world as layout
 import random
 import ui
@@ -16,10 +16,15 @@ clock = pygame.time.Clock()
 
 # Function to initialize/restart the game
 def restart_game():
-    global player, world, width, height, window
+    global players, current_player, world, width, height, window
     width, height = random.randrange(5, 20), random.randrange(5, 20)
     world = layout.get_layout(width, height, color_count)
-    player = Player(world, color_count)
+    player0 = Player(world, color_count)
+    player0.set_position(0, 0)
+    player1 = Player(world, color_count)
+    player1.set_position(width - 1, height - 1)
+    players = [player0, player1]
+    current_player = 0
     
     # Adjust window size based on grid dimensions and square size
     window_height = (height + 1) * square_size  # +1 to add space for the queue
@@ -42,23 +47,27 @@ running = True
 while running:
     # Handle events
     for event in pygame.event.get():
-        if event.type == QUIT:
-            running = False
-        elif event.type == KEYDOWN:
-            # Use an if-elif block to handle a single key press event
+        if event.type == KEYDOWN:
             if event.key == K_r:
                 restart_game()  # Restarts the game when 'r' is pressed
+            elif event.key == K_c:
+                swap_colors(players[0], players[1])
+            elif event.key == K_SPACE:
+                current_player = 1 - current_player
             elif event.key == K_w:
-                player.move_up(world)
+                players[current_player].move_up(world)
             elif event.key == K_s:
-                player.move_down(world)
+                players[current_player].move_down(world)
             elif event.key == K_a:
-                player.move_left(world)
+                players[current_player].move_left(world)
             elif event.key == K_d:
-                player.move_right(world)
+                players[current_player].move_right(world)
+            elif event.key == K_q:  # Quit the game when 'q' is pressed
+                running = False
+
 
     # Draw the world and the player
-    ui.draw_world(world, player, window, square_size)
+    ui.draw_world(world, players, window, square_size)
 
     # Update the display
     pygame.display.flip()

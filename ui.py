@@ -9,7 +9,7 @@ def draw_color_queue(queue, window, square_size, start_x, start_y, circle_radius
         color = color_map[color_code]
         pygame.draw.circle(window, color, (start_x + i * (circle_radius * 2 + spacing), start_y), circle_radius)
 
-def draw_world(world, player, window, square_size=50):
+def draw_world(world, players, window, square_size=50):
     # Define colors
     background_color = (255, 255, 255)  # White
     wall_thickness = 5  # Thickness of the wall lines
@@ -41,15 +41,21 @@ def draw_world(world, player, window, square_size=50):
                 bottom_wall_end = (x * square_size + square_size, y * square_size + square_size + queue_height)
                 pygame.draw.line(window, color_map[bottom_wall], bottom_wall_start, bottom_wall_end, wall_thickness)
 
-    # Draw the player
-    player_cell_x = player.x_pos * square_size
-    player_cell_y = player.y_pos * square_size + queue_height
-    player_center = (player_cell_x + square_size // 2, player_cell_y + square_size // 2)
-    pygame.draw.circle(window, color_map[player.color], player_center, square_size // 4)  # The radius is a quarter of the square size
+    # Draw the player0
+    player0_cell_x = players[0].x_pos * square_size
+    player0_cell_y = players[0].y_pos * square_size + queue_height
+    player0_center = (player0_cell_x + square_size // 2, player0_cell_y + square_size // 2)
+    pygame.draw.circle(window, color_map[players[0].color], player0_center, square_size // 4)
+
+    # Draw the player1
+    player1_cell_x = players[1].x_pos * square_size
+    player1_cell_y = players[1].y_pos * square_size + queue_height
+    player1_center = (player1_cell_x + square_size // 2, player1_cell_y + square_size // 2)
+    pygame.draw.circle(window, color_map[players[1].color], player1_center, square_size // 4)
 
     # Draw the color queue
     queue_start_x = square_size // 2  # Start x position for the queue circles
     queue_start_y = square_size // 2  # Start y position for the queue circles (from the top edge of the window)
     circle_radius = square_size // 4  # Radius of the circles in the queue
     
-    draw_color_queue(player.color_queue, window, square_size, queue_start_x, queue_start_y, circle_radius)
+    draw_color_queue(players[0].color_queue, window, square_size, queue_start_x, queue_start_y, circle_radius)

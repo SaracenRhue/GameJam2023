@@ -1,5 +1,20 @@
 import random
 
+class Queue():
+    def __init__(self, color_count, length=3):
+        self.color_count = color_count
+        self.length = length
+        self.queue = random.sample(range(color_count), color_count)
+
+    def get_queue(self):
+        return self.queue
+    
+    def update_queue(self):
+        self.queue.pop(0)
+        self.queue.append(random.randrange(self.color_count))
+        print(f"Updated queue to {self.queue}")
+
+
 class Player:
     def __init__(self, world, color_count):
         self.x_pos = 0
@@ -21,8 +36,8 @@ class Player:
     def set_color(self, color):
         self.color = color
 
-    def update_color(self):
-        self.color = self.color_queue[0]
+    def update_color(self, Queue):
+        # self.color = Queue.queue[0]
         self.color_queue.pop(0)
         self.color_queue.append(random.randrange(self.color_count))
         print(f"Updated player color to {self.color} and color queue to {self.color_queue}")
