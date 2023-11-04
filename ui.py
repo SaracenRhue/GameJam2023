@@ -80,3 +80,8 @@ def draw_world(queue, world, players, current_player, window, square_size=50):
     circle_radius = square_size // 4  # Radius of the circles in the queue
     
     draw_color_queue(queue.get_queue(), window, square_size, queue_start_x, queue_start_y, circle_radius)
+
+def win(window) -> None:
+    print("You won the game")
+    win_image = pygame.image.load("img/win.svg")
+    window.blit(win_image, win_image.get_rect(center = window.get_rect().center))

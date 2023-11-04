@@ -44,36 +44,47 @@ window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption('Pygame Player Movement')
 
 running = True
+won_or_game_over = False
 
 while running:
     # Handle events
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == QUIT:  # If the close button is clicked
             running = False
         elif event.type == KEYDOWN:
             if event.key == K_r:
                 restart_game()  # Restarts the game when 'r' is pressed
-            elif event.key == K_c or event.key == K_u:
-                swap_colors(players[0], players[1])
-            elif event.key == K_SPACE or event.key == K_h:
-                current_player = 1 - current_player
-            elif event.key == K_w:
-                players[current_player].move_up(world, queue)
-            elif event.key == K_s:
-                players[current_player].move_down(world, queue)
-            elif event.key == K_a:
-                players[current_player].move_left(world, queue)
-            elif event.key == K_d:
-                players[current_player].move_right(world, queue)
             elif event.key == K_q or event.key == K_ESCAPE:
                 running = False
 
+    if not won_or_game_over:
+        # Handle events
+        for event in events:
+            if event.type == KEYDOWN:
+                if event.key == K_c or event.key == K_u:
+                    swap_colors(players[0], players[1])
+                elif event.key == K_SPACE or event.key == K_h:
+                    current_player = 1 - current_player
+                elif event.key == K_w:
+                    players[current_player].move_up(world, queue)
+                elif event.key == K_s:
+                    players[current_player].move_down(world, queue)
+                elif event.key == K_a:
+                    players[current_player].move_left(world, queue)
+                elif event.key == K_d:
+                    players[current_player].move_right(world, queue)
 
-    # Draw the world and the player
-    ui.draw_world(queue, world, players, current_player, window, square_size)
+        # Draw the world and the player
+        ui.draw_world(queue, world, players, current_player, window, square_size)
 
-    # Update the display
-    pygame.display.flip()
+        # Check for win or game over
+        if players[0].x_pos == players[1].x_pos and players[0].y_pos == players[1].y_pos:
+            ui.win(window)
+            won_or_game_over = True
+
+        # Update the display
+        pygame.display.flip()
 
     # Cap the framerate
     clock.tick(fps)
