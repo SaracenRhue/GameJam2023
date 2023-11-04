@@ -70,7 +70,7 @@ while running:
 
 
     # Draw the world and the player
-    ui.draw_world(queue, world, players, window, square_size)
+    ui.draw_world(queue, world, players, current_player, window, square_size)
 
     # Update the display
     pygame.display.flip()

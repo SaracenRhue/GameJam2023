@@ -9,7 +9,7 @@ def draw_color_queue(queue, window, square_size, start_x, start_y, circle_radius
         color = color_map[color_code]
         pygame.draw.circle(window, color, (start_x + i * (circle_radius * 2 + spacing), start_y), circle_radius)
 
-def draw_world(queue, world, players, window, square_size=50):
+def draw_world(queue, world, players, current_player, window, square_size=50):
     # Define colors
     background_color = (255, 255, 255)  # White
     wall_thickness = 5  # Thickness of the wall lines
@@ -41,17 +41,16 @@ def draw_world(queue, world, players, window, square_size=50):
                 bottom_wall_end = (x * square_size + square_size, y * square_size + square_size + queue_height)
                 pygame.draw.line(window, color_map[bottom_wall], bottom_wall_start, bottom_wall_end, wall_thickness)
 
-    # Draw the player0
-    player0_cell_x = players[0].x_pos * square_size
-    player0_cell_y = players[0].y_pos * square_size + queue_height
-    player0_center = (player0_cell_x + square_size // 2, player0_cell_y + square_size // 2)
-    pygame.draw.circle(window, color_map[players[0].color], player0_center, square_size // 4)
-
-    # Draw the player1
-    player1_cell_x = players[1].x_pos * square_size
-    player1_cell_y = players[1].y_pos * square_size + queue_height
-    player1_center = (player1_cell_x + square_size // 2, player1_cell_y + square_size // 2)
-    pygame.draw.circle(window, color_map[players[1].color], player1_center, square_size // 4)
+    for index, player in enumerate(players):
+        player_cell_x = player.x_pos * square_size
+        player_cell_y = player.y_pos * square_size + queue_height
+        player_center = (player_cell_x + square_size // 2, player_cell_y + square_size // 2)
+        pygame.draw.circle(window, color_map[player.color], player_center, square_size // 4)
+        
+        # If it's the current player, draw a black circle around them
+        if index == current_player:
+            outline_radius = (square_size // 4) + 5  # Make the outline a bit bigger than the player circle
+            pygame.draw.circle(window, (0, 0, 0), player_center, outline_radius, 2)  # 2 is the thickness of the outline
 
     # Draw the color queue
     queue_start_x = square_size // 2  # Start x position for the queue circles
