@@ -31,7 +31,8 @@ def restart_game():
     window_height = (height + 1) * square_size  # +1 to add space for the queue
     window_width = width * square_size
 
-    window = pygame.display.set_mode((window_width, window_height)) 
+    window = pygame.display.set_mode((window_width, window_height), pygame.FULLSCREEN) 
+
     
 # Initialize the game
 restart_game()
@@ -40,8 +41,8 @@ restart_game()
 window_height = (len(world) + 1) * square_size  # +1 to add space for the queue
 window_width = len(world[0]) * square_size
 
-window = pygame.display.set_mode((window_width, window_height))
-pygame.display.set_caption('Pygame Player Movement')
+window = pygame.display.set_mode((window_width, window_height), pygame.FULLSCREEN) 
+pygame.display.set_caption('RGB')
 
 running = True
 won_or_game_over = False
