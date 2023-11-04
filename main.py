@@ -6,7 +6,7 @@ import ui
 
 pygame.init()
 
-# Define grid dimensions and square size
+fps = 25
 width, height = 4, 4  # Grid dimensions
 square_size = 50  # Size of each square in pixels
 color_count = 3  
@@ -64,6 +64,6 @@ while running:
     pygame.display.flip()
 
     # Cap the framerate
-    clock.tick(25)
+    clock.tick(fps)
 
 pygame.quit()
