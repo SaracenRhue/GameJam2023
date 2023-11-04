@@ -53,7 +53,7 @@ while running:
         if event.type == QUIT:  # If the close button is clicked
             running = False
         elif event.type == KEYDOWN:
-            if event.key == K_r:
+            if event.key == K_r or event.key == K_p:
                 won_or_game_over = False
                 restart_game()  # Restarts the game when 'r' is pressed
             elif event.key == K_q or event.key == K_ESCAPE:
