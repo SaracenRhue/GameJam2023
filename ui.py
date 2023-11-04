@@ -85,3 +85,8 @@ def win(window) -> None:
     print("You won the game")
     win_image = pygame.image.load("img/win.svg")
     window.blit(win_image, win_image.get_rect(center = window.get_rect().center))
+
+def game_over(window) -> None:
+    print("You lost the game")
+    game_over_image = pygame.image.load("img/game_over.svg")
+    window.blit(game_over_image, game_over_image.get_rect(center = window.get_rect().center))
