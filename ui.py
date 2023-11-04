@@ -1,6 +1,7 @@
 import pygame
 
-color_map = {0: (0, 0, 0), 1: (255, 0, 0), 2: (0, 255, 0), 3: (0, 0, 255)}
+color_map = {0: (255, 0, 0), 1: (0, 255, 0), 2: (0, 0, 255)}
+black = (0, 0, 0)  # Color for the frame
 
 def draw_world(world, player, window, square_size=50):
     # Define colors
@@ -12,6 +13,9 @@ def draw_world(world, player, window, square_size=50):
 
     height = len(world)
     width = len(world[0])
+
+    # Draw the outer frame
+    pygame.draw.rect(window, black, (0, 0, width * square_size, height * square_size), wall_thickness)
     
     # Draw the grid lines (walls)
     for y in range(height):
