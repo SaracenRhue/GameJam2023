@@ -7,15 +7,11 @@ import ui
 pygame.init()
 
 fps = 25
-width, height = 4, 4  # Grid dimensions
+width, height = 8, 4  # Grid dimensions
 square_size = 50  # Size of each square in pixels
 color_count = 3  
 
-# Adjust window size based on grid dimensions and square size
-window_width = width * square_size
-window_height = height * square_size
-window = pygame.display.set_mode((window_width, window_height))
-pygame.display.set_caption('Pygame Player Movement')
+
 
 # Set up the clock for a decent framerate
 clock = pygame.time.Clock()
@@ -23,12 +19,17 @@ clock = pygame.time.Clock()
 # Function to initialize/restart the game
 def restart_game():
     global player, world
-    player = Player(world, color_count)
     world = layout.get_layout(width, height, color_count)
-
+    player = Player(world, color_count)
+    
 # Initialize the game
 restart_game()
+# Adjust window size based on grid dimensions and square size
+window_height = (len(world) + 1) * square_size  # +1 to add space for the queue
+window_width = len(world[0]) * square_size
 
+window = pygame.display.set_mode((window_width, window_height))
+pygame.display.set_caption('Pygame Player Movement')
 running = True
 while running:
     # Handle events
