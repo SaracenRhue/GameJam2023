@@ -5,6 +5,7 @@ class Player:
         self.x_pos = 0
         self.y_pos = 0
         self.color = 0 
+        self.color_count = color_count
         self.color_queue = random.sample(range(color_count), color_count)
 
     def get_position(self):
@@ -20,6 +21,11 @@ class Player:
     def set_color(self, color):
         self.color = color
 
+    def update_color(self):
+        self.color = self.color_queue[0]
+        self.color_queue.pop(0)
+        self.color_queue.append(random.randrange(self.color_count))
+        print(f"Updated player color to {self.color} with color queue {self.color_queue}")
 
     def move_up(self, world):
         if self.y_pos > 0:
@@ -27,6 +33,7 @@ class Player:
             print(f"Trying to move up. Above bottom wall color: {above_bottom_wall_color}, Player color: {self.color}")
             if above_bottom_wall_color == self.color:
                 self.y_pos -= 1
+                self.update_color()
                 print("Moved up")
             else:
                 print("Can't move up - wall color does not match player color")
@@ -39,6 +46,7 @@ class Player:
             print(f"Trying to move down. Current bottom wall color: {current_bottom_wall_color}, Player color: {self.color}")
             if current_bottom_wall_color == self.color:
                 self.y_pos += 1
+                self.update_color()
                 print("Moved down")
             else:
                 print("Can't move down - wall color does not match player color")
@@ -51,6 +59,7 @@ class Player:
             print(f"Trying to move left. Left right wall color: {left_right_wall_color}, Player color: {self.color}")
             if left_right_wall_color == self.color:
                 self.x_pos -= 1
+                self.update_color()
                 print("Moved left")
             else:
                 print("Can't move left - wall color does not match player color")
@@ -63,6 +72,7 @@ class Player:
             print(f"Trying to move right. Current right wall color: {current_right_wall_color}, Player color: {self.color}")
             if current_right_wall_color == self.color:
                 self.x_pos += 1
+                self.update_color()
                 print("Moved right")
             else:
                 print("Can't move right - wall color does not match player color")
