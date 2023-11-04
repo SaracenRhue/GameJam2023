@@ -17,7 +17,7 @@ clock = pygame.time.Clock()
 # Function to initialize/restart the game
 def restart_game():
     global players, current_player, world, width, height, window, queue
-    width, height = random.randrange(5, 15), random.randrange(5, 15)
+    width, height = random.randrange(5, 10), random.randrange(5, 10)
     world = layout.get_layout(width, height, color_count)
     queue = Queue(color_count)
     player0 = Player()
@@ -85,11 +85,11 @@ while running:
                     if players[current_player].move_right(world, queue):
                         queue.get_queue().pop(0)
                         queue.update_queue(world, players)
-                # elif event.key == K_:
-                
+                elif event.key == K_o:
+                    dark_mode = not dark_mode
 
         # Draw the world and the player
-        ui.draw_world(queue, world, players, current_player, window, square_size)
+        ui.draw_world(queue, world, players, current_player, window, square_size, dark_mode)
 
         # Check for win or game over
         if players[0].x_pos == players[1].x_pos and players[0].y_pos == players[1].y_pos:

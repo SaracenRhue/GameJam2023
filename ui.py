@@ -9,9 +9,10 @@ def draw_color_queue(queue, window, square_size, start_x, start_y, circle_radius
         color = color_map[color_code]
         pygame.draw.circle(window, color, (start_x + i * (circle_radius * 2 + spacing), start_y), circle_radius)
 
-def draw_world(queue, world, players, current_player, window, square_size=50):
+def draw_world(queue, world, players, current_player, window, square_size=50 ,dark_mode=False):
     # Define colors
-    background_color = (255, 255, 255)  # White
+    background_color = (0, 0, 0) if dark_mode else (255, 255, 255)  # Black if dark_mode else white
+    frame_color = (255, 255, 255) if dark_mode else (0, 0, 0)
     wall_thickness = 5  # Thickness of the wall lines
     queue_height = square_size  # Height reserved for the color queue
 
@@ -22,7 +23,7 @@ def draw_world(queue, world, players, current_player, window, square_size=50):
     width = len(world[0])
 
     # Draw the outer frame with the correct offset for queue height
-    pygame.draw.rect(window, black, (0, queue_height, width * square_size, height * square_size), wall_thickness)
+    pygame.draw.rect(window, frame_color, (0, queue_height, width * square_size, height * square_size), wall_thickness)
 
     # Draw the grid lines (walls) with the correct offset for queue height
     for y in range(height):
@@ -60,18 +61,18 @@ def draw_world(queue, world, players, current_player, window, square_size=50):
     player0_cell_y = players[0].y_pos * square_size + queue_height + (3 * square_size // 4) + player0_y_offset
     pygame.draw.rect(window, color_map[players[0].color], (player0_cell_x, player0_cell_y, brim_width, brim_height))
 
-    # Outline for the brim if it is the current player's turn
-    if current_player == 0:
-        pygame.draw.rect(window, (0, 0, 0), (player0_cell_x, player0_cell_y, brim_width, brim_height), 2)
-
     # Draw the top (player 1)
     player1_cell_x = players[1].x_pos * square_size + top_padding_x
     player1_cell_y = players[1].y_pos * square_size + queue_height + (square_size - top_height) // 2 + player1_y_offset
     pygame.draw.rect(window, color_map[players[1].color], (player1_cell_x, player1_cell_y, top_width, top_height))
 
+    # Outline for the brim if it is the current player's turn
+    if current_player == 0:
+        pygame.draw.rect(window, frame_color, (player0_cell_x, player0_cell_y, brim_width, brim_height), 2)
+
     # Outline for the top if it is the current player's turn
     if current_player == 1:
-        pygame.draw.rect(window, (0, 0, 0), (player1_cell_x, player1_cell_y, top_width, top_height), 2)
+        pygame.draw.rect(window, frame_color, (player1_cell_x, player1_cell_y, top_width, top_height), 2)
 
 
     # Draw the color queue
