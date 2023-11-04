@@ -9,7 +9,7 @@ def draw_color_queue(queue, window, square_size, start_x, start_y, circle_radius
         color = color_map[color_code]
         pygame.draw.circle(window, color, (start_x + i * (circle_radius * 2 + spacing), start_y), circle_radius)
 
-def draw_world(world, players, window, square_size=50):
+def draw_world(queue, world, players, window, square_size=50):
     # Define colors
     background_color = (255, 255, 255)  # White
     wall_thickness = 5  # Thickness of the wall lines
@@ -58,4 +58,4 @@ def draw_world(world, players, window, square_size=50):
     queue_start_y = square_size // 2  # Start y position for the queue circles (from the top edge of the window)
     circle_radius = square_size // 4  # Radius of the circles in the queue
     
-    draw_color_queue(players[0].color_queue, window, square_size, queue_start_x, queue_start_y, circle_radius)
+    draw_color_queue(queue.get_queue(), window, square_size, queue_start_x, queue_start_y, circle_radius)
