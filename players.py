@@ -1,12 +1,14 @@
 import random
 
 class Player:
-    def __init__(self, color_count):
+    def __init__(self, color_count, color_queue_length = 3):
         self.x_pos = 0
         self.y_pos = 0
         self.color = 0 
         self.color_count = color_count
-        self.color_queue = random.sample(range(color_count), color_count)
+        self.color_queue_length = color_queue_length
+        self.color_queue = []
+        update_color_queue()
 
     def get_position(self):
         return (self.x_pos, self.y_pos)
@@ -24,8 +26,12 @@ class Player:
     def update_color(self):
         self.color = self.color_queue[0]
         self.color_queue.pop(0)
-        self.color_queue.append(random.randrange(self.color_count))
+        update_color_queue()
         print(f"Updated player color to {self.color} with color queue {self.color_queue}")
+
+    def update_color_queue(self) -> None:
+        while len(self.color_queue) < self.color_queue_length:
+            self.color_queue.append(random.randrange(self.color_count))
 
     def move_up(self, world):
         if self.y_pos > 0:
