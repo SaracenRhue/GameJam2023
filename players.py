@@ -75,13 +75,3 @@ def swap_colors(player0, player1):
     tmp = player0.get_color()
     player0.set_color(player1.get_color())
     player1.set_color(tmp)
-    
-
-# dummy_world = [[(1,0), (1,0)], [(1,2), (0,0)]]
-# player = Player()
-# player.move_down(dummy_world)
-# print(player.get_position())
-# player.move_right(dummy_world)
-# print(player.get_position())
-# player.move_up(dummy_world)
-# print(player.get_position())
