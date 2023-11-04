@@ -41,16 +41,38 @@ def draw_world(queue, world, players, current_player, window, square_size=50):
                 bottom_wall_end = (x * square_size + square_size, y * square_size + square_size + queue_height)
                 pygame.draw.line(window, color_map[bottom_wall], bottom_wall_start, bottom_wall_end, wall_thickness)
 
-    for index, player in enumerate(players):
-        player_cell_x = player.x_pos * square_size
-        player_cell_y = player.y_pos * square_size + queue_height
-        player_center = (player_cell_x + square_size // 2, player_cell_y + square_size // 2)
-        pygame.draw.circle(window, color_map[player.color], player_center, square_size // 4)
-        
-        # If it's the current player, draw a black circle around them
-        if index == current_player:
-            outline_radius = (square_size // 4) + 5  # Make the outline a bit bigger than the player circle
-            pygame.draw.circle(window, (0, 0, 0), player_center, outline_radius, 2)  # 2 is the thickness of the outline
+    # Define sizes for the top and brim parts of the 'hat' for each player
+    brim_height = square_size // 4
+    top_height = square_size // 3
+    brim_width = square_size - 20
+    top_width = square_size - 35
+
+    # Calculate padding for horizontal alignment
+    brim_padding_x = (square_size - brim_width) // 2
+    top_padding_x = (square_size - top_width) // 2
+
+    # Define y-offset for each player (can be adjusted as needed)
+    player0_y_offset = - 10
+    player1_y_offset = - 5
+
+    # Draw the brim (player 0)
+    player0_cell_x = players[0].x_pos * square_size + brim_padding_x
+    player0_cell_y = players[0].y_pos * square_size + queue_height + (3 * square_size // 4) + player0_y_offset
+    pygame.draw.rect(window, color_map[players[0].color], (player0_cell_x, player0_cell_y, brim_width, brim_height))
+
+    # Outline for the brim if it is the current player's turn
+    if current_player == 0:
+        pygame.draw.rect(window, (0, 0, 0), (player0_cell_x, player0_cell_y, brim_width, brim_height), 2)
+
+    # Draw the top (player 1)
+    player1_cell_x = players[1].x_pos * square_size + top_padding_x
+    player1_cell_y = players[1].y_pos * square_size + queue_height + (square_size - top_height) // 2 + player1_y_offset
+    pygame.draw.rect(window, color_map[players[1].color], (player1_cell_x, player1_cell_y, top_width, top_height))
+
+    # Outline for the top if it is the current player's turn
+    if current_player == 1:
+        pygame.draw.rect(window, (0, 0, 0), (player1_cell_x, player1_cell_y, top_width, top_height), 2)
+
 
     # Draw the color queue
     queue_start_x = square_size // 2  # Start x position for the queue circles
