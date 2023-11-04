@@ -53,9 +53,9 @@ while running:
         elif event.type == KEYDOWN:
             if event.key == K_r:
                 restart_game()  # Restarts the game when 'r' is pressed
-            elif event.key == K_c:
+            elif event.key == K_c or event.key == K_u:
                 swap_colors(players[0], players[1])
-            elif event.key == K_SPACE:
+            elif event.key == K_SPACE or event.key == K_h:
                 current_player = 1 - current_player
             elif event.key == K_w:
                 players[current_player].move_up(world, queue)
@@ -65,12 +65,12 @@ while running:
                 players[current_player].move_left(world, queue)
             elif event.key == K_d:
                 players[current_player].move_right(world, queue)
-            elif event.key == K_q:
+            elif event.key == K_q or event.key == K_ESCAPE:
                 running = False
 
 
     # Draw the world and the player
-    ui.draw_world(queue, world, players, window, square_size)
+    ui.draw_world(queue, world, players, current_player, window, square_size)
 
     # Update the display
     pygame.display.flip()
