@@ -23,7 +23,7 @@ clock = pygame.time.Clock()
 # Function to initialize/restart the game
 def restart_game():
     global player, world
-    player = Player(color_count)
+    player = Player(world, color_count)
     world = layout.get_layout(width, height, color_count)
 
 # Initialize the game

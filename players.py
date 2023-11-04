@@ -1,10 +1,11 @@
 import random
 
 class Player:
-    def __init__(self, color_count, color_queue_length = 3):
+    def __init__(self, world_layout, color_count, color_queue_length = 3):
         self.x_pos = 0
         self.y_pos = 0
-        self.color = 0 
+        self.color = 0
+        self.world_layout = world_layout
         self.color_count = color_count
         self.color_queue_length = color_queue_length
         self.color_queue = []
