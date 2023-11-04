@@ -16,10 +16,16 @@ clock = pygame.time.Clock()
 
 # Function to initialize/restart the game
 def restart_game():
-    global player, world, width, height
+    global player, world, width, height, window
     width, height = random.randrange(5, 20), random.randrange(5, 20)
     world = layout.get_layout(width, height, color_count)
     player = Player(world, color_count)
+    
+    # Adjust window size based on grid dimensions and square size
+    window_height = (height + 1) * square_size  # +1 to add space for the queue
+    window_width = width * square_size
+
+    window = pygame.display.set_mode((window_width, window_height)) 
     
 # Initialize the game
 restart_game()
@@ -40,7 +46,9 @@ while running:
             running = False
         elif event.type == KEYDOWN:
             # Use an if-elif block to handle a single key press event
-            if event.key == K_w:
+            if event.key == K_r:
+                restart_game()  # Restarts the game when 'r' is pressed
+            elif event.key == K_w:
                 player.move_up(world)
             elif event.key == K_s:
                 player.move_down(world)
