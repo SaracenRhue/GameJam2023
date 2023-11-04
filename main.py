@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from players import Player, swap_colors
+from players import Player
 import world as layout
 import ui
 
@@ -20,9 +20,14 @@ pygame.display.set_caption('Pygame Player Movement')
 # Set up the clock for a decent framerate
 clock = pygame.time.Clock()
 
+# Function to initialize/restart the game
+def restart_game():
+    global player, world
+    player = Player(color_count)
+    world = layout.get_layout(width, height, color_count)
 
-player = Player(3)
-world = layout.get_layout(width, height, color_count)
+# Initialize the game
+restart_game()
 
 running = True
 while running:
@@ -34,6 +39,14 @@ while running:
     # Get pressed keys
     keys = pygame.key.get_pressed()
 
+    # Quit if 'Q' is pressed
+    if keys[K_q]:
+        running = False
+    
+    # Restart if 'R' is pressed
+    if keys[K_r]:
+        restart_game()
+
     # Move the player with WASD
     if keys[K_w]:
         player.move_up(world)
@@ -44,10 +57,8 @@ while running:
     if keys[K_d]:
         player.move_right(world)
 
-
-
+    # Draw the world and the player
     ui.draw_world(world, player, window, square_size)
-    pygame.display.flip()
 
     # Update the display
     pygame.display.flip()
