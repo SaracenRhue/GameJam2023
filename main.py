@@ -35,7 +35,7 @@ restart_game()
 
 # Adjust window size based on grid dimensions and square size
 max_window_height = (max_square_count + 1) * square_size  # +1 to add space for the queue
-max_window_width = (max_square_count) * square_size
+max_window_width = (max_square_count + 5) * square_size # +5 for instructions and high score
 
 window = pygame.display.set_mode((max_window_width, max_window_height), pygame.FULLSCREEN) 
 pygame.display.set_caption('RGB')

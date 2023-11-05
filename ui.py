@@ -3,11 +3,112 @@ import pygame
 color_map = {0: (193, 51, 51), 1: (17, 170, 32), 2: (100, 100, 214)}
 black = (0, 0, 0)  # Color for the frame
 
+def draw_arrow(
+        surface: pygame.Surface,
+        start: pygame.Vector2,
+        end: pygame.Vector2,
+        color: pygame.Color,
+        body_width: int = 2,
+        head_width: int = 4,
+        head_height: int = 2,
+    ):
+    """Draw an arrow between start and end with the arrow head at the end.
+    Origin: https://www.reddit.com/r/pygame/comments/v3ofs9/draw_arrow_function/?rdt=40062
+
+    Args:
+        surface (pygame.Surface): The surface to draw on
+        start (pygame.Vector2): Start position
+        end (pygame.Vector2): End position
+        color (pygame.Color): Color of the arrow
+        body_width (int, optional): Defaults to 2.
+        head_width (int, optional): Defaults to 4.
+        head_height (float, optional): Defaults to 2.
+
+    
+    """
+    arrow = start - end
+    angle = arrow.angle_to(pygame.Vector2(0, -1))
+    body_length = arrow.length() - head_height
+
+    # Create the triangle head around the origin
+    head_verts = [
+        pygame.Vector2(0, head_height / 2),  # Center
+        pygame.Vector2(head_width / 2, -head_height / 2),  # Bottomright
+        pygame.Vector2(-head_width / 2, -head_height / 2),  # Bottomleft
+    ]
+    # Rotate and translate the head into place
+    translation = pygame.Vector2(0, arrow.length() - (head_height / 2)).rotate(-angle)
+    for i in range(len(head_verts)):
+        head_verts[i].rotate_ip(-angle)
+        head_verts[i] += translation
+        head_verts[i] += start
+
+    pygame.draw.polygon(surface, color, head_verts)
+
+    # Stop weird shapes when the arrow is shorter than arrow head
+    if arrow.length() >= head_height:
+        # Calculate the body rect, rotate and translate into place
+        body_verts = [
+            pygame.Vector2(-body_width / 2, body_length / 2),  # Topleft
+            pygame.Vector2(body_width / 2, body_length / 2),  # Topright
+            pygame.Vector2(body_width / 2, -body_length / 2),  # Bottomright
+            pygame.Vector2(-body_width / 2, -body_length / 2),  # Bottomleft
+        ]
+        translation = pygame.Vector2(0, body_length / 2).rotate(-angle)
+        for i in range(len(body_verts)):
+            body_verts[i].rotate_ip(-angle)
+            body_verts[i] += translation
+            body_verts[i] += start
+
+        pygame.draw.polygon(surface, color, body_verts)
+
 def draw_color_queue(queue, window, square_size, start_x, start_y, circle_radius):
     spacing = 10  # Spacing between circles
     for i, color_code in enumerate(queue):
         color = color_map[color_code]
         pygame.draw.circle(window, color, (start_x + i * (circle_radius * 2 + spacing), start_y), circle_radius)
+
+def draw_instructions(window: pygame.Surface, square_size):
+    # dimensions
+    window_width = window.get_width()
+    window_height = window.get_height()
+    brim_height = square_size // 4
+    top_height = square_size // 3
+    brim_width = square_size - 20
+    top_width = square_size - 35
+    brim_padding_x = (square_size - brim_width) // 2
+    top_padding_x = (square_size - top_width) // 2
+    brim_y_offset = -10
+    top_y_offset = -5
+    brim_padding_y = (3 * square_size // 4) + brim_y_offset
+    top_padding_y = (square_size - top_height) // 2 + top_y_offset
+
+    # Draw the brim
+    x_pos_brim = window_width - 5 * square_size + brim_padding_x
+    y_pos_brim = 2 * square_size + brim_padding_y
+    pygame.draw.rect(window, color_map[0], (x_pos_brim, y_pos_brim, brim_width, brim_height))
+
+    # Draw the top
+    x_pos_top = window_width - 4 * square_size + top_padding_x
+    y_pos_top = 2 * square_size + top_padding_y
+    pygame.draw.rect(window, color_map[1], (x_pos_top, y_pos_top, top_width, top_height))
+
+    # Draw arrow
+    x_pos_arrow = window_width - 3 * square_size + square_size // 8
+    y_pos_arrow = 2 * square_size + square_size // 2
+    arrow_length = 3 * square_size // 4
+    body_width = square_size // 10
+    arrow_height = square_size // 2
+    head_width = arrow_length // 3
+    draw_arrow(window, pygame.Vector2(x_pos_arrow, y_pos_arrow), pygame.Vector2(x_pos_arrow + arrow_length, y_pos_arrow), black, body_width, head_width, arrow_height)
+
+    # Draw completed hat
+    x_pos_brim_connected = window_width - 2 * square_size + brim_padding_x
+    y_pos_brim_connected = 2 * square_size + brim_padding_y
+    pygame.draw.rect(window, color_map[2], (x_pos_brim_connected, y_pos_brim_connected, brim_width, brim_height))
+    x_pos_top_connected = window_width - 2 * square_size + top_padding_x
+    y_pos_top_connected = 2 * square_size + top_padding_y
+    pygame.draw.rect(window, color_map[0], (x_pos_top_connected, y_pos_top_connected, top_width, top_height))
 
 def draw_world(queue, world, players, current_player, window, square_size=50 ,dark_mode=False):
     # Define colors
@@ -81,6 +182,7 @@ def draw_world(queue, world, players, current_player, window, square_size=50 ,da
     circle_radius = square_size // 4  # Radius of the circles in the queue
     
     draw_color_queue(queue.get_queue(), window, square_size, queue_start_x, queue_start_y, circle_radius)
+    draw_instructions(window, square_size)
 
 def win(window) -> None:
     print("You won the game")
