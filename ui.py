@@ -214,9 +214,11 @@ def draw_world(queue, world, players, current_player, window, square_size=50, da
 def win(window) -> None:
     print("You won the game")
     win_image = pygame.image.load("img/win.svg")
+    win_image = pygame.transform.scale(win_image, (window.get_height() // 2, window.get_height() // 2))
     window.blit(win_image, win_image.get_rect(center = window.get_rect().center))
 
 def game_over(window) -> None:
     print("You lost the game")
     game_over_image = pygame.image.load("img/game_over.svg")
+    game_over_image = pygame.transform.scale(game_over_image, (window.get_height() // 2, window.get_height() // 2))
     window.blit(game_over_image, game_over_image.get_rect(center = window.get_rect().center))
