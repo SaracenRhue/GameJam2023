@@ -22,9 +22,6 @@ def draw_world(queue, world, players, current_player, window, square_size=50 ,da
     height = len(world)
     width = len(world[0])
 
-    # Draw the outer frame with the correct offset for queue height
-    pygame.draw.rect(window, frame_color, (0, queue_height, width * square_size, height * square_size), wall_thickness)
-
     # Draw the grid lines (walls) with the correct offset for queue height
     for y in range(height):
         for x in range(width):
@@ -41,6 +38,9 @@ def draw_world(queue, world, players, current_player, window, square_size=50 ,da
                 bottom_wall_start = (x * square_size, y * square_size + square_size + queue_height)
                 bottom_wall_end = (x * square_size + square_size, y * square_size + square_size + queue_height)
                 pygame.draw.line(window, color_map[bottom_wall], bottom_wall_start, bottom_wall_end, wall_thickness)
+
+    # Draw the outer frame with the correct offset for queue height
+    pygame.draw.rect(window, frame_color, (0, queue_height, width * square_size + wall_thickness / 2, height * square_size + wall_thickness / 2), wall_thickness)
 
     # Define sizes for the top and brim parts of the 'hat' for each player
     brim_height = square_size // 4
