@@ -26,7 +26,7 @@ clock = pygame.time.Clock()
 
 # Function to initialize/restart the game
 def restart_game():
-    global players, current_player, score, high_score, world_id, world, width, height, window, queue
+    global players, current_player, score, high_score, world_id, world, width, height, window, queue, last_action
     width, height = random.randrange(min_square_count, max_square_count), random.randrange(min_square_count, max_square_count)
     world = layout.get_layout(width, height, color_count)
     queue = Queue(color_count)
@@ -39,6 +39,7 @@ def restart_game():
     world_id = f"{width}x{height}"
     score = 0
     high_score = None if world_id not in high_scores else high_scores[world_id]
+    last_action = None
     
 # Initialize the game
 restart_game()
@@ -55,6 +56,8 @@ dark_mode = False
 won_or_game_over = False
 
 while running:
+    last_action = None
+
     # Handle events
     events = pygame.event.get()
     for event in events:
@@ -77,21 +80,25 @@ while running:
                     current_player = 1 - current_player
                 elif event.key == K_w:
                     if players[current_player].move_up(world, queue):
+                        last_action = "up"
                         queue.get_queue().pop(0)
                         queue.update_queue(world, players)
                         score += 1
                 elif event.key == K_s:
                     if players[current_player].move_down(world, queue):
+                        last_action = "down"
                         queue.get_queue().pop(0)
                         queue.update_queue(world, players)
                         score += 1
                 elif event.key == K_a:
                     if players[current_player].move_left(world, queue):
+                        last_action = "left"
                         queue.get_queue().pop(0)
                         queue.update_queue(world, players)
                         score += 1
                 elif event.key == K_d:
                     if players[current_player].move_right(world, queue):
+                        last_action = "right"
                         queue.get_queue().pop(0)
                         queue.update_queue(world, players)
                         score += 1
@@ -99,7 +106,7 @@ while running:
                     dark_mode = not dark_mode
 
         # Draw the world and the player
-        ui.draw_world(queue, world, players, current_player, window, square_size, dark_mode, score, high_score)
+        ui.draw_world(queue, world, players, current_player, last_action, window, square_size, dark_mode, score, high_score)
 
         # Check for win or game over
         if players[0].x_pos == players[1].x_pos and players[0].y_pos == players[1].y_pos:

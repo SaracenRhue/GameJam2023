@@ -111,7 +111,7 @@ def draw_instructions(window: pygame.Surface, square_size, arrow_color):
     y_pos_top_connected = 2 * square_size + top_padding_y
     pygame.draw.rect(window, color_map[0], (x_pos_top_connected, y_pos_top_connected, top_width, top_height))
 
-def draw_world(queue, world, players, current_player, window, square_size=50, dark_mode=False, current_score=None, high_score=None):
+def draw_world(queue, world, players, current_player, last_action, window, square_size=50, dark_mode=False, current_score=None, high_score=None):
     # Define colors
     background_color = black if dark_mode else white
     frame_color = white if dark_mode else black
@@ -210,6 +210,16 @@ def draw_world(queue, world, players, current_player, window, square_size=50, da
     text_grid_size_rect.right = text_high_score_rect.left - square_size // 2
     text_grid_size_rect.top = text_high_score_rect.top
     window.blit(text_grid_size, text_grid_size_rect)
+
+    # play sound
+    if last_action == "up":
+        pygame.mixer.Sound("sound/up.mp3").play()
+    elif last_action == "down":
+        pygame.mixer.Sound("sound/down.mp3").play()
+    elif last_action == "left":
+        pygame.mixer.Sound("sound/left.mp3").play()
+    elif last_action == "right":
+        pygame.mixer.Sound("sound/right.mp3").play()
 
 def win(window) -> None:
     print("You won the game")
