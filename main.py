@@ -9,6 +9,8 @@ pygame.init()
 
 fps = 25
 square_size = 50  # Size of each square in pixels
+min_square_count = 5
+max_square_count = 10
 color_count = 3  
 
 # Set up the clock for a decent framerate
@@ -17,7 +19,7 @@ clock = pygame.time.Clock()
 # Function to initialize/restart the game
 def restart_game():
     global players, current_player, world, width, height, window, queue
-    width, height = random.randrange(5, 10), random.randrange(5, 10)
+    width, height = random.randrange(min_square_count, max_square_count), random.randrange(min_square_count, max_square_count)
     world = layout.get_layout(width, height, color_count)
     queue = Queue(color_count)
     player0 = Player()
@@ -26,22 +28,16 @@ def restart_game():
     player1.set_position(width - 1, height - 1)
     players = [player0, player1]
     current_player = 0
-    
-    # Adjust window size based on grid dimensions and square size
-    window_height = (height + 1) * square_size  # +1 to add space for the queue
-    window_width = width * square_size
-
-    window = pygame.display.set_mode((window_width, window_height), pygame.FULLSCREEN) 
 
     
 # Initialize the game
 restart_game()
 
 # Adjust window size based on grid dimensions and square size
-window_height = (len(world) + 1) * square_size  # +1 to add space for the queue
-window_width = len(world[0]) * square_size
+max_window_height = (max_square_count + 1) * square_size  # +1 to add space for the queue
+max_window_width = (max_square_count) * square_size
 
-window = pygame.display.set_mode((window_width, window_height), pygame.FULLSCREEN) 
+window = pygame.display.set_mode((max_window_width, max_window_height), pygame.FULLSCREEN) 
 pygame.display.set_caption('RGB')
 
 running = True
