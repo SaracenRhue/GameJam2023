@@ -1,3 +1,5 @@
+import json
+import os
 import pygame
 from pygame.locals import *
 from players import Player, Queue, swap_colors
@@ -12,13 +14,19 @@ square_size = 50  # Size of each square in pixels
 min_square_count = 5
 max_square_count = 10
 color_count = 3
+if os.path.exists("high_scores.json"):
+    with open("high_scores.json", "r") as openfile:
+        # Reading from json file
+        high_scores = json.load(openfile)
+else:
+    high_scores = dict()
 
 # Set up the clock for a decent framerate
 clock = pygame.time.Clock()
 
 # Function to initialize/restart the game
 def restart_game():
-    global players, current_player, score, world, width, height, window, queue
+    global players, current_player, score, high_score, world_id, world, width, height, window, queue
     width, height = random.randrange(min_square_count, max_square_count), random.randrange(min_square_count, max_square_count)
     world = layout.get_layout(width, height, color_count)
     queue = Queue(color_count)
@@ -28,15 +36,16 @@ def restart_game():
     player1.set_position(width - 1, height - 1)
     players = [player0, player1]
     current_player = 0
+    world_id = f"{width}x{height}"
     score = 0
-
+    high_score = None if world_id not in high_scores else high_scores[world_id]
     
 # Initialize the game
 restart_game()
 
 # Adjust window size based on grid dimensions and square size
 max_window_height = (max_square_count + 1) * square_size  # +1 to add space for the queue
-max_window_width = (max_square_count + 5) * square_size # +5 for instructions and high score
+max_window_width = (max_square_count + 6) * square_size # +6 for instructions and high score
 
 window = pygame.display.set_mode((max_window_width, max_window_height), pygame.FULLSCREEN) 
 pygame.display.set_caption('RGB')
@@ -90,11 +99,17 @@ while running:
                     dark_mode = not dark_mode
 
         # Draw the world and the player
-        ui.draw_world(queue, world, players, current_player, window, square_size, dark_mode, score)
+        ui.draw_world(queue, world, players, current_player, window, square_size, dark_mode, score, high_score)
 
         # Check for win or game over
         if players[0].x_pos == players[1].x_pos and players[0].y_pos == players[1].y_pos:
             ui.win(window)
+            if world_id not in high_scores or score < high_scores[world_id]:
+                high_scores[world_id] = score
+                json_object = json.dumps(high_scores, indent=4)
+                # Writing to sample.json
+                with open("high_scores.json", "w") as outfile:
+                    outfile.write(json_object)
             won_or_game_over = True
         elif len(queue.get_queue()) < queue.length:
             ui.game_over(window)

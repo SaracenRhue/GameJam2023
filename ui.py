@@ -185,13 +185,31 @@ def draw_world(queue, world, players, current_player, window, square_size=50, da
     draw_color_queue(queue.get_queue(), window, square_size, queue_start_x, queue_start_y, circle_radius)
     draw_instructions(window, square_size, frame_color)
 
+    
+    font_monospace = pygame.font.SysFont("monospace", square_size)
+    
     # Draw current score
     if current_score is not None:
-        font_monospace = pygame.font.SysFont("monospace", square_size)
         text_score = font_monospace.render(str(current_score), 1, frame_color)
         text_score_rect = text_score.get_rect()
         text_score_rect.right = window.get_width() - 1 * square_size
         window.blit(text_score, text_score_rect)
+
+    # Draw high score
+    if high_score is not None:
+        text_high_score = font_monospace.render(str(high_score), 1, frame_color)
+    else:
+        text_high_score = font_monospace.render("-", 1, frame_color)
+    text_high_score_rect = text_high_score.get_rect()
+    text_high_score_rect.left = window.get_width() - 3 * square_size - square_size // 2
+    text_high_score_rect.top = 3 * square_size
+    window.blit(text_high_score, text_high_score_rect)
+
+    text_grid_size = font_monospace.render(f"{width}x{height}:", 1, frame_color)
+    text_grid_size_rect = text_grid_size.get_rect()
+    text_grid_size_rect.right = text_high_score_rect.left - square_size // 2
+    text_grid_size_rect.top = text_high_score_rect.top
+    window.blit(text_grid_size, text_grid_size_rect)
 
 def win(window) -> None:
     print("You won the game")
