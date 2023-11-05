@@ -1,6 +1,6 @@
 import pygame
 
-color_map = {0: (255, 0, 0), 1: (0, 255, 0), 2: (0, 0, 255)}
+color_map = {0: (193, 51, 51), 1: (17, 170, 32), 2: (100, 100, 214)}
 black = (0, 0, 0)  # Color for the frame
 
 def draw_color_queue(queue, window, square_size, start_x, start_y, circle_radius):
