@@ -2,6 +2,7 @@ import pygame
 
 color_map = {0: (193, 51, 51), 1: (17, 170, 32), 2: (100, 100, 214)}
 black = (0, 0, 0)  # Color for the frame
+white = (255, 255, 255)
 
 def draw_arrow(
         surface: pygame.Surface,
@@ -68,7 +69,7 @@ def draw_color_queue(queue, window, square_size, start_x, start_y, circle_radius
         color = color_map[color_code]
         pygame.draw.circle(window, color, (start_x + i * (circle_radius * 2 + spacing), start_y), circle_radius)
 
-def draw_instructions(window: pygame.Surface, square_size):
+def draw_instructions(window: pygame.Surface, square_size, arrow_color):
     # dimensions
     window_width = window.get_width()
     window_height = window.get_height()
@@ -100,7 +101,7 @@ def draw_instructions(window: pygame.Surface, square_size):
     body_width = square_size // 10
     arrow_height = square_size // 2
     head_width = arrow_length // 3
-    draw_arrow(window, pygame.Vector2(x_pos_arrow, y_pos_arrow), pygame.Vector2(x_pos_arrow + arrow_length, y_pos_arrow), black, body_width, head_width, arrow_height)
+    draw_arrow(window, pygame.Vector2(x_pos_arrow, y_pos_arrow), pygame.Vector2(x_pos_arrow + arrow_length, y_pos_arrow), arrow_color, body_width, head_width, arrow_height)
 
     # Draw completed hat
     x_pos_brim_connected = window_width - 2 * square_size + brim_padding_x
@@ -110,10 +111,10 @@ def draw_instructions(window: pygame.Surface, square_size):
     y_pos_top_connected = 2 * square_size + top_padding_y
     pygame.draw.rect(window, color_map[0], (x_pos_top_connected, y_pos_top_connected, top_width, top_height))
 
-def draw_world(queue, world, players, current_player, window, square_size=50 ,dark_mode=False):
+def draw_world(queue, world, players, current_player, window, square_size=50, dark_mode=False, current_score=None, high_score=None):
     # Define colors
-    background_color = (0, 0, 0) if dark_mode else (255, 255, 255)  # Black if dark_mode else white
-    frame_color = (255, 255, 255) if dark_mode else (0, 0, 0)
+    background_color = black if dark_mode else white
+    frame_color = white if dark_mode else black
     wall_thickness = 5  # Thickness of the wall lines
     queue_height = square_size  # Height reserved for the color queue
 
@@ -182,7 +183,15 @@ def draw_world(queue, world, players, current_player, window, square_size=50 ,da
     circle_radius = square_size // 4  # Radius of the circles in the queue
     
     draw_color_queue(queue.get_queue(), window, square_size, queue_start_x, queue_start_y, circle_radius)
-    draw_instructions(window, square_size)
+    draw_instructions(window, square_size, frame_color)
+
+    # Draw current score
+    if current_score is not None:
+        font_monospace = pygame.font.SysFont("monospace", square_size)
+        text_score = font_monospace.render(str(current_score), 1, frame_color)
+        text_score_rect = text_score.get_rect()
+        text_score_rect.right = window.get_width() - 1 * square_size
+        window.blit(text_score, text_score_rect)
 
 def win(window) -> None:
     print("You won the game")

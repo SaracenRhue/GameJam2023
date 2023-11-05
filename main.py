@@ -11,14 +11,14 @@ fps = 25
 square_size = 50  # Size of each square in pixels
 min_square_count = 5
 max_square_count = 10
-color_count = 3  
+color_count = 3
 
 # Set up the clock for a decent framerate
 clock = pygame.time.Clock()
 
 # Function to initialize/restart the game
 def restart_game():
-    global players, current_player, world, width, height, window, queue
+    global players, current_player, score, world, width, height, window, queue
     width, height = random.randrange(min_square_count, max_square_count), random.randrange(min_square_count, max_square_count)
     world = layout.get_layout(width, height, color_count)
     queue = Queue(color_count)
@@ -28,6 +28,7 @@ def restart_game():
     player1.set_position(width - 1, height - 1)
     players = [player0, player1]
     current_player = 0
+    score = 0
 
     
 # Initialize the game
@@ -69,23 +70,27 @@ while running:
                     if players[current_player].move_up(world, queue):
                         queue.get_queue().pop(0)
                         queue.update_queue(world, players)
+                        score += 1
                 elif event.key == K_s:
                     if players[current_player].move_down(world, queue):
                         queue.get_queue().pop(0)
                         queue.update_queue(world, players)
+                        score += 1
                 elif event.key == K_a:
                     if players[current_player].move_left(world, queue):
                         queue.get_queue().pop(0)
                         queue.update_queue(world, players)
+                        score += 1
                 elif event.key == K_d:
                     if players[current_player].move_right(world, queue):
                         queue.get_queue().pop(0)
                         queue.update_queue(world, players)
+                        score += 1
                 elif event.key == K_o:
                     dark_mode = not dark_mode
 
         # Draw the world and the player
-        ui.draw_world(queue, world, players, current_player, window, square_size, dark_mode)
+        ui.draw_world(queue, world, players, current_player, window, square_size, dark_mode, score)
 
         # Check for win or game over
         if players[0].x_pos == players[1].x_pos and players[0].y_pos == players[1].y_pos:
